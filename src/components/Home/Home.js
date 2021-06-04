@@ -1,9 +1,12 @@
 import Cakelist from "../Cake/Cakelist";
+import CarouselNew from "../Carousel";
+
 
 function Home(){
     return (
         <div>
-           <Cakelist></Cakelist>
+            <CarouselNew />
+            <Cakelist></Cakelist>
         </div>
     )
 }

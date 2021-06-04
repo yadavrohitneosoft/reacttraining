@@ -23,6 +23,7 @@ function Cakelist (){
     }, []) //useEffect() will not get called on any value/property updated instead value given in an empty array 
     return (
         <div className="container">
+            <p className="pp">cakes</p>
             <div className="row cakelist">
                 {/* show loading till the time data loads */}
                 {isLoading && <div><img src="./assets/images/loader.gif" height="35"/></div>} 
