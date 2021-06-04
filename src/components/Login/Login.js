@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
 
-class Signup extends React.PureComponent{
+class Login extends React.PureComponent{
 
     constructor(props){
         super(props);
@@ -10,12 +10,7 @@ class Signup extends React.PureComponent{
         // this.emailP = props.details.email
         //we can write this without any constructor as well
         this.state = { likes: 0, name: '', email: '', password: '' }
-        //defining regex
-        const regExp = RegExp(
-            /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-        )
     }
-    
     
     //like
     like = ()=>{
@@ -24,9 +19,9 @@ class Signup extends React.PureComponent{
         })
     }
     //login fn
-    doRegister = (event)=>{
+    doLogin = (event)=>{
         event.preventDefault()
-        //this.props.callme()
+        this.props.callme()
     }
     
 
@@ -34,7 +29,7 @@ class Signup extends React.PureComponent{
         console.log('rerender check>>>>>',this.state.likes)
         return(
             // <div height="100px">
-            //     <label>{this.state.likes}</span>
+            //     <label>{this.state.likes}</label>
             //     <button onClick={this.like}>Click me</button>
             // </div> 
             <section className="intro">
@@ -46,19 +41,11 @@ class Signup extends React.PureComponent{
                             </div>
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                                 <div className="card" style={{borderradius: "1rem"}}>
-                                    <div className="card-body  text-center">
+                                    <div className="card-body   text-center">
                                         <form id="signupForm" >
                                             <div className=" pb-1">
-                                                <h4 className="fw-bold mb-3">Create Account</h4>
+                                                <h4 className="fw-bold mb-3">Login</h4>
                                                 {/* <i className="fa fa-user fa-2x mb-1"></i> */}
-                                                <div className="form-group mb-3">
-                                                    <input type="text" id="fname" className="form-control" placeholder="First Name" required />
-                                                    <span className="form-label" htmlFor="fname"></span>
-                                                </div>
-                                                <div className="form-group mb-3">
-                                                    <input type="text" id="lname" className="form-control" placeholder="Last Name" required />
-                                                    <span className="form-label" htmlFor="lname"></span>
-                                                </div>
                                                 <div className="form-group mb-3">
                                                     <input type="email" id="email" className="form-control" placeholder="Username" required />
                                                     <span className="form-label" htmlFor="email"></span>
@@ -67,15 +54,11 @@ class Signup extends React.PureComponent{
                                                     <input type="password" id="password" className="form-control" placeholder="Password" required />
                                                     <span className="form-label" htmlFor="password"></span>
                                                 </div>
-                                                <div className="form-group mb-3">
-                                                    <input type="password" id="cpassword" className="form-control" placeholder="Confirm Password" required />
-                                                    <span className="form-label" htmlFor="cpassword"></span>
-                                                </div>
-                                                <button className="btn btn-primary btn-rounded gradient-custom px-3" onClick={this.doRegister} >Register</button>
+                                                <button className="btn btn-primary btn-rounded gradient-custom px-3" onClick={this.doLogin} >Login</button>
                                             </div>
                                         </form>
                                         <div>
-                                            <p className="mb-0">Have an account? <Link to="/login" className="text-body fw-bold">Signin</Link></p>
+                                            <p className="mb-0">Don't have an account? <Link to="/signup" className="text-body fw-bold">Signup</Link></p>
                                         </div>
                                     </div>
                                 </div>
@@ -89,4 +72,4 @@ class Signup extends React.PureComponent{
 
 }
 
-export default Signup
+export default Login

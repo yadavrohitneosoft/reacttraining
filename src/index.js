@@ -2,15 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-// import Header from './includes/Header';
-// import CarouselNew from './components/Carousel';
-// import FooterNew from './includes/Footer';
+import reportWebVitals from './reportWebVitals'; 
 ReactDOM.render(
-  <React.StrictMode>
-    {/* <Header />
-    <CarouselNew />
-    <FooterNew /> */}
+  <React.StrictMode> 
     <App />
   </React.StrictMode>,
   document.getElementById('root')

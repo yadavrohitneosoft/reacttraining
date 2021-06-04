@@ -1,10 +1,10 @@
-let FooterNew = ()=>{
+let Footer = ()=>{
     return (
             <footer className="bg-dark text-center text-white">
             {/* <!-- Grid container --> */}
             <div className="container p-4">
                 {/* <!-- Section: Social media --> */}
-                <section className="mb-4">
+                <section className="mb-4 social">
                     {/* <!-- Facebook --> */}
                     <a className="btn btn-outline-light btn-floating m-1" href="#!" role="button"
                         ><i className="fa fa-facebook-f"></i
@@ -21,7 +21,7 @@ let FooterNew = ()=>{
                 {/* <!-- Section: Social media --> */}
 
                 {/* <!-- Section: Form --> */}
-                <section className="">
+                <section className="dashed-bottom mb-4">
                 <form action="">
                     {/* <!--Grid row--> */}
                     <div className="row d-flex justify-content-center">
@@ -37,8 +37,8 @@ let FooterNew = ()=>{
                     <div className="col-md-5 col-12">
                         {/* <!-- Email input --> */}
                         <div className="form-outline form-white mb-4">
-                        <input type="email" id="form5Example2" className="form-control" />
-                        <label className="form-label" htmlFor="form5Example2">Email address</label>
+                        <input type="email" id="form5Example2" className="form-control" placeholder="Enter Email Address" />
+                        {/* <label className="form-label" htmlFor="form5Example2">Email address</label> */}
                         </div>
                     </div>
                     {/* <!--Grid column--> */}
@@ -74,13 +74,13 @@ let FooterNew = ()=>{
                     {/* <!--Grid column--> */}
                     <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
                     {/* <h5 className="text-uppercase">Links</h5> */}
-                        <p>Cake shop is a plateform to order Cakes & Bakery products online at a reasonable price. </p>
+                        <p className="desc">Cake shop is a plateform to order Cakes & Bakery products online at a reasonable price. </p>
                     </div>
                     {/* <!--Grid column--> */}
 
                     {/* <!--Grid column--> */}
                     <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 className="text-uppercase">Quick Links</h5>
+                    <h6 className="text-uppercase">Quick Links</h6>
 
                     <ul className="list-unstyled mb-0">
                         <li>
@@ -95,7 +95,7 @@ let FooterNew = ()=>{
 
                     {/* <!--Grid column--> */}
                     <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 className="text-uppercase">Cakes</h5>
+                    <h6 className="text-uppercase">Cakes</h6>
 
                     <ul className="list-unstyled mb-0">
                         <li>
@@ -110,7 +110,7 @@ let FooterNew = ()=>{
 
                     {/* <!--Grid column--> */}
                     <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 className="text-uppercase">Pastries</h5>
+                    <h6 className="text-uppercase">Pastries</h6>
 
                     <ul className="list-unstyled mb-0">
                         <li>
@@ -131,8 +131,8 @@ let FooterNew = ()=>{
 
             {/* <!-- Copyright --> */}
             <div className="text-center p-3" style={{backgroundColor: "rgba(0, 0, 0, 0.2)"}}>
-                © 2021 Copyright:
-                <a className="text-white" href="https://itsreactapp.herokuapp.com/"> My React App</a>
+                <span className="cpy">© 2021 - </span>
+                <a className="text-white cpy" href="https://itsreactapp.herokuapp.com/">Cake Shop</a>
             </div>
             {/* <!-- Copyright --> */}
             </footer>
@@ -140,4 +140,4 @@ let FooterNew = ()=>{
     )
 }
 
-export default FooterNew;
+export default Footer;
