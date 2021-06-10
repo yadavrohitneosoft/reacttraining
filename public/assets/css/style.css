@@ -5,11 +5,22 @@ a{
     box-shadow: none !important; 
 } 
 
+.row {
+    --bs-gutter-x: -2.5rem !important;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(var(--bs-gutter-y) * -1);
+    margin-right: calc(var(--bs-gutter-x) / -2);
+    margin-left: calc(var(--bs-gutter-x) / -2);
+}
+
 .error {
     display: block;
-    height: 12px;
-    font-size: 12px;
-    margin-top: 4px;
+    height: 5px;
+    text-align: left;
+    font-size: 9px;
+    margin-bottom: 10px;
     color: #AB0000;
 }
 .fs12{
@@ -57,7 +68,7 @@ a{
 }
 #signupForm .form-control {
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 11px;
     border-color: #ddd;
     height: 30px;
     padding: 8px 12px;
@@ -90,6 +101,7 @@ a{
     flex: 1 0 20% !important;
     padding: 0px !important;
     margin: 5px 5px !important; 
+    transition: transform .7s;
     box-shadow: 0px 13px 6px -10px #bbcbd8;
 }
 .cakeImage{
@@ -153,3 +165,8 @@ a{
     outline: 0;
     box-shadow: none !important;
 }
+.cakes:hover {
+    -ms-transform: scale(1.1); /* IE 9 */
+    -webkit-transform: scale(1.1); /* Safari 3-8 */
+    transform: scale(1.1); 
+  }

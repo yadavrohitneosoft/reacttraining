@@ -2,19 +2,21 @@
 // import './App.css';
 import { getAllByPlaceholderText } from "@testing-library/dom";
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 let Header = (props)=> { //props are readonly- we can't modify them
-    let projectName = "My shop"
-    let userName = "Rohit!"
-    let searchString = "Default string"
+    let searchString = "" 
     //props.details.name = null //props are readonly- we can't modify them
-    let getAlert = (event)=>{
-        event.preventDefault()
+    let getSearchString = (event)=>{
+        event.preventDefault() 
+        if(searchString !='' && searchString!=undefined){
+            const url = '/search?q='+searchString;
+            props.history.push(url);
+        } 
         console.log('we are searching the value for: ', searchString)
     }
     //get search value
-    let getSearch = function(event){
+    let getConsoleSearch = function(event){
         searchString = event.target.value
         console.log('>>>>>> ', event.target.value);
     }
@@ -24,7 +26,7 @@ let Header = (props)=> { //props are readonly- we can't modify them
     
     //logout
     let logout = ()=>{
-        
+        //setUser(false)
     }
 
     return (
@@ -58,9 +60,9 @@ let Header = (props)=> { //props are readonly- we can't modify them
                         </li>
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
-                        <input onChange={getSearch} className="form-control fs12 mr-sm-2 lh17 " type="search" placeholder="Search" aria-label="Search" />
+                        <input onChange={getConsoleSearch} className="form-control fs12 mr-sm-2 lh17 " type="search" placeholder="Search" aria-label="Search" />
                         {/* {searchString} */}
-                        <button className="btn btn-success my-2 my-sm-0 mr-sm-2 fs12 lh17 searchbtn" onClick={getAlert} type="submit">Search</button>
+                        <button className="btn btn-success my-2 my-sm-0 mr-sm-2 fs12 lh17 searchbtn" onClick={getSearchString} type="submit">Search</button>
                         {!props.isLoggedin && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link> }
                         {props.isLoggedin && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
                     </form>
@@ -79,4 +81,4 @@ let Header = (props)=> { //props are readonly- we can't modify them
     );
 }
 
-export default Header;
+export default withRouter(Header);

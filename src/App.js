@@ -10,6 +10,10 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home/Home';
 import PageNotFound from './includes/PageNotFound';
+import CakeDetails from './components/Cake/CakeDetails';
+import Cart from './components/Cart/Cart';
+import Checkout from './components/Checkout/Checkout';
+import Search from './components/Search/Search';
 
 function App() {
   var [login,setLogin] = useState(false)
@@ -31,6 +35,9 @@ function App() {
     //alert(1)
     setLogin(true) //set setLogin is true
   }
+  
+  //development environment check
+  //console.log('>>>>>>>', process.env)
 
   return (
     <div className="App">
@@ -52,7 +59,13 @@ function App() {
           {/* Note: we can not get history in object if we pass component as props. To achieve this, we have to deal with tag */}
           <Route exact path="/signup" component={Signup}></Route> {/* here Signup component passed as a props  */}
           <Route exact path="/login"><Login x="10" /></Route> {/* we are passing props with history in object */}
-          <Route exact path="/*" component={PageNotFound}></Route>{/* here PageNotFound component passed as a props  */}
+          <Route exact path="/cakeDetails/:cakeId" component={CakeDetails}></Route>
+          <Route exact path="/search" component={Search}></Route>
+          <Route exact path="/cart"><Cart name="rohit"></Cart></Route> 
+          <Route path="/checkout" ><Checkout/></Route> {/* we are not using exact here because of child routing*/}
+          {/* path="/*" will come after all route cz it has a global search, 
+              if we put first then other routes will not get search */}
+          <Route exact path="/*" component={PageNotFound}></Route> {/* here PageNotFound component passed as a props  */}
         </Switch>
         <Footer />
       </Router>

@@ -5,7 +5,7 @@ function Cake (props){
         return ( 
             // repeat the col div
             <div className="cakes col">
-                <Link to="/cakeDetails/{...props.data.cakeid}"><img src={props.data.image} className="card-img-top cakeImage" alt="..." /></Link>
+                <Link to={'/cakeDetails/'+props.data.cakeid}><img src={props.data.image} className="card-img-top cakeImage" alt="..." /></Link>
                 <p className="card-title">{props.data.name}</p>
                 <i className="fa fa-inr">&nbsp;<span className="card-text">{props.data.price}</span></i>
                 { props.data.discount && <span className="card-text">{props.data.discount}</span> }
