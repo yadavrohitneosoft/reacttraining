@@ -26,7 +26,7 @@ function Search(props){
             setLoading(false)
             console.log('list not found error:', error)
         })
-    }, [])
+    }, [searchString.q]) //if array empty then useEffect will execute onle once hence rencder will be called once
     //console.log(searchString);
     //=> {foo: 'bar'}
         return (

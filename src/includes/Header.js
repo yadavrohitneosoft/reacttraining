@@ -1,11 +1,26 @@
 // import logo from './logo.svg';
 // import './App.css';
 import { getAllByPlaceholderText } from "@testing-library/dom";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+// import { css } from "@emotion/react";
+// import HashLoader from "react-spinners/HashLoader";
 
-let Header = (props)=> { //props are readonly- we can't modify them
-    let searchString = "" 
+let Header = (props)=> { //props are readonly- we can't modify  them
+    //alert(props.isLoggedin)
+    var [isLoggedOut,setUserLogout] = useState(false);
+    let searchString = "";
+    var username = "";
+    var isUserName = false;
+    if(localStorage.token){
+        //setUserLogin(true)
+        var getData = localStorage.getItem('userData')
+        var userInfo = JSON.parse(getData); 
+        if(getData){
+            isUserName = true;
+            username = userInfo.name;  
+        }
+    }
     //props.details.name = null //props are readonly- we can't modify them
     let getSearchString = (event)=>{
         event.preventDefault() 
@@ -13,20 +28,21 @@ let Header = (props)=> { //props are readonly- we can't modify them
             const url = '/search?q='+searchString;
             props.history.push(url);
         } 
-        console.log('we are searching the value for: ', searchString)
+        //console.log('we are searching the value for: ', searchString)
     }
     //get search value
     let getConsoleSearch = function(event){
         searchString = event.target.value
-        console.log('>>>>>> ', event.target.value);
+        //console.log('>>>>>> ', event.target.value);
     }
     //login property check
-    console.log('after logged in value of login>>>>', props.isLoggedin)
+        console.log('after logged in value of login>>>>', props.isLoggedin)
     //var [str, setString] = useState('login'); //str is var, setString is a function
     
     //logout
-    let logout = ()=>{
-        //setUser(false)
+    let logout = ()=>{ 
+        localStorage.clear();
+        props.history.push('/');
     }
 
     return (
@@ -63,20 +79,21 @@ let Header = (props)=> { //props are readonly- we can't modify them
                         <input onChange={getConsoleSearch} className="form-control fs12 mr-sm-2 lh17 " type="search" placeholder="Search" aria-label="Search" />
                         {/* {searchString} */}
                         <button className="btn btn-success my-2 my-sm-0 mr-sm-2 fs12 lh17 searchbtn" onClick={getSearchString} type="submit">Search</button>
-                        {!props.isLoggedin && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link> }
-                        {props.isLoggedin && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
+                        {/* {!props.isLoggedin && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link> }
+                        {props.isLoggedin && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> } */}
+                        {!localStorage.token && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link>  }
+                        {localStorage.token && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
                     </form>
                 </div>
-                {/* <div className="flex-grow-1">
+                <div className="ml10">
                     <ul className="navbar-nav mx-auto">
                         <li className="nav-item log"> 
-                        Explanation: !props.isLoggedin &&  --> if props.isLoggedin will not be true then && will execute and button will show 
-                            {!props.isLoggedin && <Link to="/login"><button className="btn btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link> }
-                            {props.isLoggedin && <button className="btn btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
+                        {!isUserName && <span>Hello, Guest!</span>}
+                        {isUserName && <span>Hello, {username}!</span>}
                         </li>
                     </ul>
-                </div> */}
-            </div>
+                </div>
+            </div>  
         </nav> 
     );
 }

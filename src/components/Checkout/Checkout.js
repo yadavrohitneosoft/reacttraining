@@ -2,8 +2,11 @@ import {Redirect, Route, Link} from 'react-router-dom';
 import Summary from '../Summary/Summary';
 import Address from '../Address/Address';
 import Confirm from '../Confirm/Confirm';
+import {useRouteMatch} from "react-router-dom";
 
 function Checkout(props){
+    var path = useRouteMatch();
+    alert(JSON.stringify(path))
     return(
         <>
             <div className="row">

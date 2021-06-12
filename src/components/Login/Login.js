@@ -6,23 +6,23 @@ import  { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {withRouter} from 'react-router-dom';
+import { css } from "@emotion/react";
+import HashLoader from "react-spinners/HashLoader";
 
 class Login extends React.PureComponent{
-    emailError
-    passwordError
-    apiurl
+    isLoading = false;
+    isResponseMsg = false;
+    isSubmit = false;
+    responseMsg = '';
     constructor(props){
-        super(props);
-        this.emailError = this.passwordError = "";
-        console.log('login props>>', props); 
+        super(props); 
+        //console.log('login props>>', props); 
         //we can write this without any constructor as well
         //this.state = { likes: 0, name: '', email: '', password: '' }
         this.state = {    
             email: "", password: "", formErrors: {}    
         }; 
         this.initialState = this.state; //initial state
-        this.isResponseMsg = false //initially set to false;
-        this.responseMsg = '';
         //email event
         // changeEmail = (event)=>{
         //     this.setState({
@@ -71,7 +71,8 @@ class Login extends React.PureComponent{
     //form submission here
     handleSubmit = (e) => {    
         e.preventDefault();    
-        if (this.handleFormValidation()) {      
+        if (this.handleFormValidation()) {  
+            this.isSubmit = true;    
             //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.state)     
             //storing required info into userInfo var to send by api
             var apiurl = process.env.REACT_APP_BASE_URL+'/login'; //we can access static variables by process.env 
@@ -83,15 +84,19 @@ class Login extends React.PureComponent{
                     method:"post",
                     url:apiurl,
                     data: userInfo
-                }).then(res=>{ 
+                }).then(res=>{  
+                    console.log(res.data.message)
                     if((res.data.email)){ 
+                        this.isSubmit = false;
+                        this.isLoading = true;
                         this.isResponseMsg = true //set to true after getting response
-                        this.responseMsg = res.data.message //show response message
-                        //this.props.history.push('/') //redirecting to home 
+                        this.responseMsg = res.data.message //show response message 
                         localStorage.setItem('token', res.data.token);
                         localStorage.setItem('userData', JSON.stringify(res.data));
                         console.log('response>>>>> ', res.data) 
+                        this.props.myLoginProp(); //calling myLoginProp function in app.js and setting value true.
                         //this.setState(this.initialState) //reset fields after successfull login
+                        this.props.history.push('/') //redirecting to home 
                         toast(this.responseMsg, { 
                             position: "top-right",
                             autoClose: 5000,
@@ -101,8 +106,20 @@ class Login extends React.PureComponent{
                             draggable: true,
                             progress: 0
                         });
-                    } 
+                    }else if((res.data.message) == "Invalid Credentials"){
+                        this.isSubmit = false; 
+                        toast(res.data.message, { 
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: 0
+                        });
+                    }
                 }, err =>{ 
+                    this.isSubmit = false; 
                     console.log('list not found error:', err)
                 }) 
         }else{
@@ -116,6 +133,7 @@ class Login extends React.PureComponent{
         const { emailErr, PasswordErr } = this.state.formErrors;
         return( 
             <section className="intro">
+                <HashLoader loading={this.isLoading} color="#FEBD69" css={css`display: block;margin: 0 auto;`} size={40} />
                 <ToastContainer position="top-center" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 <div className="mask d-flex align-items-center h-100" style={{ }}>
                     <div className="container">
@@ -149,7 +167,8 @@ class Login extends React.PureComponent{
                                                     />
                                                     <span className="error" htmlFor="password">{PasswordErr ? PasswordErr : ""}</span>
                                                 </div>
-                                                <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Login</button>
+                                                {!this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Login</button> }
+                                                {this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="button" >Processing...</button>}
                                             </div>
                                         </form>
                                         <div>

@@ -169,4 +169,27 @@ a{
     -ms-transform: scale(1.1); /* IE 9 */
     -webkit-transform: scale(1.1); /* Safari 3-8 */
     transform: scale(1.1); 
-  }
+}
+.pddd{
+    display: block !important;
+    margin-left: auto;
+    margin-right: auto;
+    height: 400px;
+    padding: 8px;
+    width: 100% !important;
+}
+.new{text-align: left;
+    padding-left: 10px;    text-transform: capitalize;}
+.fs34{font-size: 34px;}
+.fs18{font-size: 18px;}
+.pd10{border: 1px solid #ddd;
+    padding: 10px !important;}
+    .pdl{text-align: left;
+        padding-left: 10px;}
+.ml10{
+    margin-left: 10px;
+    color: #fff;
+}
+.bg-dark{
+    background: #1a1e21 !important;
+}

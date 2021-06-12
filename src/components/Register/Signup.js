@@ -6,6 +6,9 @@ import  { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 class Signup extends React.PureComponent{
 
+    isResponseMsg = false //initially set to false;
+    responseMsg = ''
+    isSubmit = false
     constructor(props){
         super(props);
         //console.log('props>>', props); 
@@ -15,8 +18,6 @@ class Signup extends React.PureComponent{
             firstname: "", lastname: "", email: "", password: "", cpassword: "", formErrors: {}    
         }; 
         this.initialState = this.state; //initial state
-        this.isResponseMsg = false //initially set to false;
-        this.responseMsg = ''
     }
 
     handleFormValidation() {    
@@ -66,8 +67,9 @@ class Signup extends React.PureComponent{
     //form submission here
     handleSubmit = (e) => {    
         e.preventDefault();    
-        if (this.handleFormValidation()) {    
-            console.log('You have been successfully registered.') 
+        if (this.handleFormValidation()) { 
+            this.isSubmit = true;   
+            //console.log('You have been successfully registered.') 
             //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.state)     
             this.setState(this.initialState)
             //storing required info into userInfo var to send by api
@@ -83,13 +85,15 @@ class Signup extends React.PureComponent{
                     data: userInfo
                 }).then((response)=>{ 
                     if(response.status==200){ 
+                        this.isSubmit = false; 
                         this.isResponseMsg = true //set to true after getting response
                         this.responseMsg = response.data.message //show response message
                         this.props.history.push('/') //redirecting to home
                         console.log('response>>>>> ', this.isResponseMsg) 
                         //toast.success(response.data.message)
                     } 
-                }, (error)=>{ 
+                }, (error)=>{
+                    this.isSubmit = false;  
                     console.log('list not found error:', error)
                 }) 
         }else{
@@ -178,7 +182,8 @@ class Signup extends React.PureComponent{
                                                     />
                                                     <span className="error" htmlFor="cpassword">{cPasswordErr ? cPasswordErr : ""}</span>
                                                 </div>
-                                                <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Register</button>
+                                                {!this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Register</button> }
+                                                {this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="button" >Processing...</button>}
                                             </div>
                                         </form>
                                         <div>
