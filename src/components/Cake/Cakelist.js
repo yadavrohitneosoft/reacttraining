@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 import HashLoader from "react-spinners/HashLoader";
 
 function Cakelist (){
-    var apiurl = process.env.REACT_APP_BASE_URL+'/allcakes';
+    var apiurl = process.env.REACT_APP_API_BASE_URL+'/allcakes';
     var [cakes,getCakes] = useState([]) //initialising cakes with an empty array in usestate([])
     var [isLoading,setLoading] = useState(true) //if we want to show loader untill response come
     //useEffect() method called when any state property gets changed/updated

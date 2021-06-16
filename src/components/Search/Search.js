@@ -40,7 +40,7 @@ function Search(props){
                         //before we were getting values from data component now we are getting from an API Url
                             items.map((each,index)=>{  
                                 return( 
-                                    <div className="cakes col">
+                                    <div className="cakes col" key={"cake_div"+index}>
                                         <Link to={'/cakeDetails/'+each.cakeid}><img src={each.image} className="card-img-top cakeImage" alt="..." /></Link>
                                         <p className="card-title">{each.name}</p>
                                         <i className="fa fa-inr">&nbsp;<span className="card-text">{each.price}</span></i> 

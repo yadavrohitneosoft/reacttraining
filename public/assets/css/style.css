@@ -193,3 +193,41 @@ a{
 .bg-dark{
     background: #1a1e21 !important;
 }
+#cart{
+    color: #fff;
+    vertical-align: middle;
+}
+.crt{
+    background-color: #d7af71;
+    border-radius: 10px;
+    color: white;
+    /* display: inline-block; */
+    font-size: 10px;
+    line-height: 1;
+    right: 7px;
+    top: -13px;
+    padding: 3px 7px;
+    text-align: center;
+    /* vertical-align: middle; */
+    /* white-space: nowrap; */
+    /* margin: 0 5px; */
+    position: relative;
+
+}
+.ddd{
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+.valign{
+    vertical-align: middle;
+}
+.resmsg{
+    color: red;
+    font-size: 13px;
+    display: block;
+    margin: 5px;
+}
+.cimage{
+    height: 50px !important;
+    width: 80px !important;
+}

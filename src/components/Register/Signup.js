@@ -73,7 +73,7 @@ class Signup extends React.PureComponent{
             //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.state)     
             this.setState(this.initialState)
             //storing required info into userInfo var to send by api
-            var apiurl = process.env.REACT_APP_BASE_URL+'/register'; //we can access static variables by process.env 
+            var apiurl = process.env.REACT_APP_API_BASE_URL+'/register'; //we can access static variables by process.env 
             var userInfo = {
                 name: this.state.firstname + this.state.lastname,
                 email: this.state.email,

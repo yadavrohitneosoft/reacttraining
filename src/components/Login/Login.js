@@ -1,13 +1,12 @@
 import React, {Component} from "react";
 import { Link } from "react-router-dom";
-import ReactFormInputValidation from "react-form-input-validation";
-import axios from 'axios';
-import  { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {withRouter} from 'react-router-dom';
 import { css } from "@emotion/react";
 import HashLoader from "react-spinners/HashLoader";
+import { connect } from "react-redux";
+import {loginMiddleware} from '../../reduxStore/Middlewares'
 
 class Login extends React.PureComponent{
     isLoading = false;
@@ -23,25 +22,8 @@ class Login extends React.PureComponent{
             email: "", password: "", formErrors: {}    
         }; 
         this.initialState = this.state; //initial state
-        //email event
-        // changeEmail = (event)=>{
-        //     this.setState({
-        //         email: event.target.value
-        //     })
-        // }
-        //password event
-        // changePassword = (event)=>{
-        //     this.setState({
-        //         password: event.target.value
-        //     })
-        // }
     }
-     
-    //login fn
-    // doLogin = (event)=>{
-    //     event.preventDefault()
-    //     this.props.callme()
-    // }
+    
     handleFormValidation() {    
         const { email, password } = this.state; //constant set    
         let formErrors = {}; //formerror set blank initially 
@@ -72,56 +54,8 @@ class Login extends React.PureComponent{
     handleSubmit = (e) => {    
         e.preventDefault();    
         if (this.handleFormValidation()) {  
-            this.isSubmit = true;    
-            //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.state)     
-            //storing required info into userInfo var to send by api
-            var apiurl = process.env.REACT_APP_BASE_URL+'/login'; //we can access static variables by process.env 
-            var userInfo = { 
-                email: this.state.email,
-                password: this.state.password
-            }
-            axios({
-                    method:"post",
-                    url:apiurl,
-                    data: userInfo
-                }).then(res=>{  
-                    console.log(res.data.message)
-                    if((res.data.email)){ 
-                        this.isSubmit = false;
-                        this.isLoading = true;
-                        this.isResponseMsg = true //set to true after getting response
-                        this.responseMsg = res.data.message //show response message 
-                        localStorage.setItem('token', res.data.token);
-                        localStorage.setItem('userData', JSON.stringify(res.data));
-                        console.log('response>>>>> ', res.data) 
-                        this.props.myLoginProp(); //calling myLoginProp function in app.js and setting value true.
-                        //this.setState(this.initialState) //reset fields after successfull login
-                        this.props.history.push('/') //redirecting to home 
-                        toast(this.responseMsg, { 
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: 0
-                        });
-                    }else if((res.data.message) == "Invalid Credentials"){
-                        this.isSubmit = false; 
-                        toast(res.data.message, { 
-                            position: "top-right",
-                            autoClose: 3000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: 0
-                        });
-                    }
-                }, err =>{ 
-                    this.isSubmit = false; 
-                    console.log('list not found error:', err)
-                }) 
+            //here sending data to middleware
+            this.props.dispatch(loginMiddleware(this.state)) 
         }else{
             console.log('Something went wrong') 
             return false;
@@ -147,7 +81,7 @@ class Login extends React.PureComponent{
                                         <form id="signupForm" onSubmit={this.handleSubmit} >
                                             <div className=" pb-1">
                                                 <h4 className="fw-bold mb-1">Login</h4>
-                                                {/* {this.isResponseMsg && <span>{this.responseMsg}</span>} */}
+                                                {!this.props.isLoggedIn && <span className="resmsg">{this.props.response_message}</span>}
                                                 {/* <i className="fa fa-user fa-2x mb-1"></i> */}
                                                 <div className="form-group mb-2">
                                                     <input type="text" name="email" id="email" 
@@ -167,8 +101,11 @@ class Login extends React.PureComponent{
                                                     />
                                                     <span className="error" htmlFor="password">{PasswordErr ? PasswordErr : ""}</span>
                                                 </div>
-                                                {!this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Login</button> }
-                                                {this.isSubmit && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="button" >Processing...</button>}
+                                            { !this.props.isLoading && 
+                                                <button className="btn btn-primary btn-rounded gradient-custom px-3" type="submit" >Login</button> 
+                                            } 
+                                            { this.props.isLoading && <button className="btn btn-primary btn-rounded gradient-custom px-3" type="button" >Processing...</button>
+                                            }
                                             </div>
                                         </form>
                                         <div>
@@ -185,8 +122,16 @@ class Login extends React.PureComponent{
     }
 
 }
-
-Login = withRouter(Login) 
+//connect adds a prop to component named as dispatch()
+Login = connect(function (state, props){
+    if (state.AuthReducer?.isLoggedIn) { 
+        props.history.push('/')
+    }else{
+        return{
+            isLoading: state.AuthReducer?.isLoading,
+            response_message: state.AuthReducer.response_message
+        }
+    }
+})(Login)
 //here I passed Login to withRouter and it return with some additional things(with props)
-//and then I exported modified Login below
-export default Login
+export default withRouter(Login) 

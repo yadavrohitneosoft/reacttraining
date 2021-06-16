@@ -14,6 +14,7 @@ import CakeDetails from './components/Cake/CakeDetails';
 import Checkout from './components/Checkout/Checkout';
 import Search from './components/Search/Search';
 import axios from 'axios';
+import Dashboard from './components/Admin/Dashboard'
 
 //--------------LAZY LOADING CONCEPT-------------------------------
 //here we are lazy loading the cart component 
@@ -25,32 +26,27 @@ import axios from 'axios';
 
 function App() {
   var [login,setLogin] = useState(false)
-  var [likes,setLikes] = useState(0)
-  var [dislikes,setDislikes] = useState(0)
+  const token = localStorage.getItem('token');
+
+  //setting token in headers for every axios request
+  axios.interceptors.request.use((request) => {
+    request.headers["authtoken"] = localStorage.getItem('token')
+    return request
+  })
 
   // useEffect(()=>{
-  //   //alert('component mounted')
-  // },[dislikes])
-  //console.log('initial value of login>>>>', login)
+  //   if(localStorage.token){
+  //     axios({
+  //       method: 'get',
+  //       url: process.env.REACT_APP_BASE_URL + '/getuserdetails',
+  //       headers: {
+  //         authToken: localStorage.token
+  //       }
+  //     })
+  //   }
+  // },[])
 
-  useEffect(()=>{
-    if(localStorage.token){
-      axios({
-        method: 'get',
-        url: process.env.REACT_APP_BASE_URL + '/getuserdetails',
-        headers: {
-          authToken: localStorage.token
-        }
-      })
-    }
-  },[])
-
-  //object creation
-  var details = {
-      name:  "rohit",
-      email: "rohitydv@gm.com",
-      password: "12345"
-  } 
+   
   //function
   var doLogin = ()=>{ 
     setLogin(true) //set setLogin is true
@@ -63,7 +59,7 @@ function App() {
     <div className="App">
       <Router>
         {/* we are implementing header under Router here because it will common to all the components */}
-        <Header isLoggedin={login} details={details} project="rohits project" p="10" >children</Header>
+        <Header>{/* we can pass any data here(in between header tag) and access on component by props.children */}</Header>
         <Switch>
           {/* switch uses when you want to match exact route only once not to check again & again, for e.g. without
               switch pagenotfound component will come on all pages */}
@@ -75,9 +71,10 @@ function App() {
           <Route exact path="/cakeDetails/:cakeId" component={CakeDetails}></Route>
           <Route exact path="/search" component={Search}></Route>
           <Route exact path="/cart">{Cart}</Route>  {/* lazy loading  */}
-          <Route path="/checkout" ><Checkout/></Route> {/* we are not using exact here because of child routing*/}
+          <Route exact path="/checkout" ><Checkout/></Route> {/* we are not using exact here because of child routing*/}
           {/* path="/*" will come after all route cz it has a global search, 
               if we put first then other routes will not get search */}
+          <Route exact path="/dashboard" ><Dashboard/></Route>
           <Route exact path="/*" component={PageNotFound}></Route> {/* here PageNotFound component passed as a props  */}
         </Switch>
         <Footer />

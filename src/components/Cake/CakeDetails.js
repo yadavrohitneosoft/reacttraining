@@ -1,32 +1,53 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
+import { connect } from 'react-redux';
+import Cake from './Cake';
+import { addToCartMiddleware } from '../../reduxStore/Middlewares';
+import { withRouter } from 'react-router-dom';
 
 function CakeDetails(props){
     //getting cakeID
+    const token = localStorage.token; 
     var params = useParams(); //1st method to get the params by useParams() hook in react.
     //console.log(params.cakeId)
-    const data = props.match.params //1st method to get the params, we are getting cake id through props.match.params
+    const qParam = props.match.params //2nd method to get the params, we are getting cake id through props.match.params
     //console.log('cakeId:', data.cakeId)
-    var apiurl = process.env.REACT_APP_BASE_URL+"/cake/"+data.cakeId; //we can access static variables by process.env
-    var [cake,getCakeDetail] = useState([]) //initialising cake with an empty array in usestate([])
-    var [isLoading,setLoading] = useState(true) //if we want to show loader untill response come
-    var [ingredients,setIngred] = useState([])
+    var apiurl = process.env.REACT_APP_API_BASE_URL+"/cake/"+qParam.cakeId; //we can access static variables by process.env
+    const [cake,getCakeDetail] = useState([]) //initialising cake with an empty array in usestate([])
+    const [isLoading,setLoading] = useState(true) //if we want to show loader untill response come
+    const [ingredients,setIngred] = useState([])
+    const [isAddedCart, setAddedCart] = useState(false) //setting isAddedCart to false untill item added
+    const [relatedCakes, getRelatedCakes] = useState([])
+    const [similarCakeLength, setSimilarCakeLength] = useState(0)
+    let cakeList = undefined 
     useEffect(()=>{
         axios({
             method:"get",
             url:apiurl
-        }).then((response)=>{
-            const cakeDetail = response.data.data
-            getCakeDetail(cakeDetail)
+        }).then( response => {
+            cakeList = response.data.data
+            getCakeDetail(cakeList)
             setIngred(response.data.data.ingredients)
-            setLoading(false) //we are hiding loader after response come
-            console.log('cake details response >>>>> ', response.data.data)
-        }, (error)=>{
+            setLoading(false) //we are hiding loader after response come 
+        }, error => {
             setLoading(false)
             console.log('list not found error:', error)
+        }).then(res => {
+            axios({
+                url: process.env.REACT_APP_API_BASE_URL +'/searchcakes?q='+cakeList.flavour,
+                method: 'get'
+            }).then( res => {
+                const relatedCakesList = res.data.data
+                setSimilarCakeLength(res.data.data.length)
+                getRelatedCakes(relatedCakesList)
+            }, err => {} )
         })
-    }, [])
+    }, [qParam.cakeId])
+
+    let addToCart = (data)=>{ 
+        props.dispatch(addToCartMiddleware(data))
+    }
     return(
         
         <div>
@@ -86,15 +107,34 @@ function CakeDetails(props){
                             ))}
                         </div> 
                     </div>
-                    <hr/>
-                    <button type="button" className="btn btn-primary btn-md mr-1 mb-2">Buy now</button>
-                    <button type="button" className="btn btn-light btn-md mr-1 mb-2"><i
-                        className="fas fa-shopping-cart pr-2"></i>Add to cart</button>
+                    <hr/> 
+                    {!isAddedCart && <button type="button" onClick={ () => addToCart(cake) } className="btn btn-dark btn-md mr-1 mb-2"><i
+                        className="fa fa-shopping-cart pr-2"></i>Add to cart</button> }
+                    {isAddedCart && <button type="button" className="btn btn-dark btn-md mr-1 mb-2">Adding to Cart...</button>}
                     </div>
                 </div>
+                {(similarCakeLength > 0 ) && 
+                    <div className="row">
+                        <h2>Similar Products</h2>
+                        {
+                            relatedCakes.map((each, index) => {
+                                return (
+                                    <Cake data={each} key={index} page="details"/>
+                                )
+                            })
+                        }
+                    </div>
+                }
             </section>
         </div>
     )
 }
 
-export default CakeDetails
+CakeDetails = connect(function (state, props){
+    if (state.CartReducer.success) {
+        props.history.push('/cart')
+        state.CartReducer.success = false
+    }
+})(CakeDetails);
+
+export default withRouter(CakeDetails)

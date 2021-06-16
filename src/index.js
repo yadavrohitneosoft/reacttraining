@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals'; 
+import Store from './reduxStore/Store';
+import { Provider } from 'react-redux';
+import dmart from './reduxStore/Store'
 ReactDOM.render(
-  <React.StrictMode> 
-    <App />
-  </React.StrictMode>,
+  // <React.StrictMode> 
+      <Provider store={dmart}>
+          <App />
+      </Provider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 
