@@ -17,7 +17,7 @@ function CakeDetails(props){
     var apiurl = process.env.REACT_APP_API_BASE_URL+"/cake/"+qParam.cakeId; //we can access static variables by process.env
     //const dispatch = useDispatch(); //we can also use dispatch like this way instead of this.props.dispath
     const [cake,getCakeDetail] = useState([]) //initialising cake with an empty array in usestate([])
-    const [loading, setLoading] = useState(false) //if we want to show loader untill response come
+    const [loading, setLoading] = useState(true) //if we want to show loader untill response come
     const [ingredients,setIngred] = useState([])
     const [isAddedCart, setAddedCart] = useState(false) //setting isAddedCart to false untill item added
     const [relatedCakes, getRelatedCakes] = useState([])
@@ -31,9 +31,9 @@ function CakeDetails(props){
             cakeList = response.data.data
             getCakeDetail(cakeList)
             setIngred(response.data.data.ingredients)
-            setLoading(true) //we are hiding loader after response come 
+            setLoading(false) //we are hiding loader after response come 
         }, error => {
-            setLoading(true)
+            setLoading(false)
             console.log('list not found error:', error)
         }).then(res => {
             axios({
@@ -42,8 +42,7 @@ function CakeDetails(props){
             }).then( res => {
                 const relatedCakesList = res.data.data
                 setSimilarCakeLength(res.data.data.length)
-                getRelatedCakes(relatedCakesList)
-                setLoading(true)
+                getRelatedCakes(relatedCakesList) 
             }, err => {} )
         })
     }, [qParam.cakeId])
@@ -54,7 +53,7 @@ function CakeDetails(props){
     return(
         
         <div>
-            {loading ? ('') : <Loader></Loader>}
+            {loading ? <Loader></Loader> : 
             <section className="mb-3 mt-3">
                 <div className="row">
                     <div className="col-md-5 pd10 mb-4 mb-md-0"> 
@@ -129,6 +128,7 @@ function CakeDetails(props){
                     </div>
                 }
             </section>
+            }
         </div>
     )
 }
