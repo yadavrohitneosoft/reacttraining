@@ -93,12 +93,23 @@ let Header = (props)=> { //props are readonly- we can't modify  them
                         {!props.isLoggedIn && <span className="valign">Hello, Guest!</span>}
                         {props.isLoggedIn && <span className="valign">Hello, {props.username}!</span>}
                         </li>
-                        <li className="nav-item log ">
-                        {!props.isLoggedIn && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link>  }
                         {props.isLoggedIn && 
-                            <Link to="/my-orders"><button className="btn fs12 btn-success searchbtn my-2 my-sm-0 lh17">My Orders</button></Link>
+                            <li className="nav-item dropdown log">
+                                <button className="dropdown-toggle btn fs12 btn-success searchbtn my-2 my-sm-0 lh17" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                My Account
+                                </button>
+                                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <Link to="/admin/dashboard" className="dropdown-item"  >My Dashboard</Link> 
+                                     <Link to="/my-orders" className="dropdown-item"  >My Orders</Link>
+                                </div>
+                            </li>
                         }
-                        {props.isLoggedIn && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
+                        <li className="nav-item log ">
+                            {!props.isLoggedIn && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link>  }
+                            {/* {props.isLoggedIn && 
+                                <Link to="/my-orders"><button className="btn fs12 btn-success searchbtn my-2 my-sm-0 lh17">My Orders</button></Link>
+                            } */}
+                            {props.isLoggedIn && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
                         </li>
                     </ul>
                 </div>

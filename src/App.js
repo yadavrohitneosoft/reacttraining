@@ -75,7 +75,7 @@ function App() {
           <Route exact path="/checkout" ><Checkout/></Route> {/* we are not using exact here because of child routing*/}
           {/* path="/*" will come after all route cz it has a global search, 
               if we put first then other routes will not get search */}
-          <Route exact path="/dashboard" ><Dashboard/></Route>
+          <Route exact path="/admin/dashboard" ><Dashboard/></Route>
           <Route exact path="/my-orders" component={Orders} />
           <Route exact path="/*" component={PageNotFound}></Route> {/* here PageNotFound component passed as a props  */}
         </Switch>

@@ -28,7 +28,7 @@ const Orders = () => {
                     orders.map((each, index) => {
                         return (
                             <>
-                                <div className="card">
+                                <div className="card" key={index}>
                                     <div className="card-header" id={"heading"+(index)}>
                                         <h2 className="mb-0">
                                             <button className="btn btn-link btn-block text-left collapsed" type="button"
@@ -44,7 +44,7 @@ const Orders = () => {
                                         {
                                             each.cakes.map((eachCake, cakeIndex) => {
                                                 return (
-                                                    <div className="row">
+                                                    <div className="row" key={cakeIndex}>
                                                         <div className="card col-md-3">
                                                             <div className="card-body">
                                                                 <img src={eachCake.image} className="card-img-top" alt="..." style={{maxHeight: '213px', minHeight: '213px'}} />

@@ -1,57 +1,56 @@
-
-let Dashboard = (props)=>{
-
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Cake from '../Cake/Cake'
+import Loader from '../../includes/Loader'
+import { useState, useEffect } from 'react' 
+import axios from 'axios'
+const Dashboard = (props)=>{
+    var [cakes,getCakes] = useState([]) //initialising cakes with an empty array in usestate([])
+    const [loading, setLoading] = useState(true) //if we want to show loader untill response come
+    //useEffect() method will be called again when any state property gets changed/updated
+    useEffect(()=>{ 
+        axios({
+            method:"get",
+            url: process.env.REACT_APP_API_BASE_URL+'/allcakes'
+        }).then((response)=>{
+            const cakeList = response.data.data
+            getCakes(cakeList)
+            setLoading(false) //we are hiding loader after response come 
+        }, (error)=>{
+            setLoading(false)
+            console.log('list not found error:', error)
+        })
+    }, []) //useEffect() will not get called on any value/property updated instead value given in an empty array 
+    
 
 
     return (
-        <div id="slide-out" className="side-nav fixed">
-            <ul className="custom-scrollbar">
-                <li>
-                    <div className="logo-wrapper waves-light waves-effect waves-light">
-                        <a className="navbar-brand d-flex justify-content-center align-items-center dark-blue-text" href="#">
-                        <img id="MDB-logo"
-                            src="https://z9t4u9f6.stackpathcdn.com/wp-content/uploads/2018/06/logo-mdb-jquery-small.png"
-                            alt="MDB Logo" />
-                        </a>
+        <div className="container" style={{marginTop: "20px"}}>
+            <div className="row">
+                <div className="col-xs-12">
+                <h3>Welocome To Admin </h3> 
+                <div className="d-flex align-items-start">
+                    <div className="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <Link to="/admin/dashboard" ><button className="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Cakes</button></Link>
+                        <button className="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Add Cake</button>
                     </div>
-                </li> 
-                <li>
-                    <form className="search-form" role="search">
-                        <div className="form-group md-form mt-0 mb-1 d-block">
-                        <input type="text" className="form-control w-100" placeholder="Search" />
+                    <div className="tab-content" id="v-pills-tabContent">
+                        <div className="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        {loading ? <Loader></Loader> :
+                   
+                                //before we were getting values from data component now we are getting from an API Url
+                                cakes.map((each,index)=>{ 
+                                    return ( <Cake data={each} key={index} sendclass="dashboard" ></Cake> )
+                                })
+                        }
                         </div>
-                    </form>
-                </li>
-        
-                <li>
-                    <ul className="collapsible collapsible-accordion">
-                        <li>
-                        <a className="collapsible-header navbar-link-2 waves-effect arrow-r d-flex align-items-center"><i
-                            className="fas fa-gem dark-blue-text"></i> Single link
-                        </a>
-                        </li>
-                        <li>
-                        <a className="collapsible-header navbar-link-2 waves-effect arrow-r d-flex align-items-center">
-                            <i className="fas fa-user dark-blue-text"></i>
-                            Collapsible menu
-                            <i className="fas fa-angle-down rotate-icon"></i>
-                        </a>
-                        <div className="collapsible-body">
-                            <ul className="list-unstyled">
-                            <li>
-                                <a href="#" className="waves-effect">Single link</a>
-                            </li>
-                            <li>
-                                <a href="#" className="waves-effect">Single link</a>
-                            </li>
-                            </ul>
-                        </div>
-                        </li>
-                    </ul>
-                </li>
-        
-            </ul>
-        </div>  
+                        <div className="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+                        
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 
