@@ -1,10 +1,11 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Cake from './Cake';
 import { addToCartMiddleware } from '../../reduxStore/Middlewares';
 import { withRouter } from 'react-router-dom';
+import Loader from '../../includes/Loader'
 
 function CakeDetails(props){
     //getting cakeID
@@ -14,8 +15,9 @@ function CakeDetails(props){
     const qParam = props.match.params //2nd method to get the params, we are getting cake id through props.match.params
     //console.log('cakeId:', data.cakeId)
     var apiurl = process.env.REACT_APP_API_BASE_URL+"/cake/"+qParam.cakeId; //we can access static variables by process.env
+    //const dispatch = useDispatch(); //we can also use dispatch like this way instead of this.props.dispath
     const [cake,getCakeDetail] = useState([]) //initialising cake with an empty array in usestate([])
-    const [isLoading,setLoading] = useState(true) //if we want to show loader untill response come
+    const [loading, setLoading] = useState(false) //if we want to show loader untill response come
     const [ingredients,setIngred] = useState([])
     const [isAddedCart, setAddedCart] = useState(false) //setting isAddedCart to false untill item added
     const [relatedCakes, getRelatedCakes] = useState([])
@@ -29,9 +31,9 @@ function CakeDetails(props){
             cakeList = response.data.data
             getCakeDetail(cakeList)
             setIngred(response.data.data.ingredients)
-            setLoading(false) //we are hiding loader after response come 
+            setLoading(true) //we are hiding loader after response come 
         }, error => {
-            setLoading(false)
+            setLoading(true)
             console.log('list not found error:', error)
         }).then(res => {
             axios({
@@ -41,6 +43,7 @@ function CakeDetails(props){
                 const relatedCakesList = res.data.data
                 setSimilarCakeLength(res.data.data.length)
                 getRelatedCakes(relatedCakesList)
+                setLoading(true)
             }, err => {} )
         })
     }, [qParam.cakeId])
@@ -51,7 +54,7 @@ function CakeDetails(props){
     return(
         
         <div>
-            {isLoading && <div><img src="./assets/images/loader.gif" height="35"/></div>} 
+            {loading ? ('') : <Loader></Loader>}
             <section className="mb-3 mt-3">
                 <div className="row">
                     <div className="col-md-5 pd10 mb-4 mb-md-0"> 

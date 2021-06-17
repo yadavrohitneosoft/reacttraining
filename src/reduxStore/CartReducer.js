@@ -6,31 +6,32 @@ function CartReducer(state={ //initial state
     isRemoved: false
 }, action){
    switch(action.type){
-       case "ADDTOCART":{
+       case "ADDTOCART" : {
            state = {...state} //copy all previous state in state
-           state.cart.push(action.payload?.data)  
-           state["totalItems"] += state.cart.length
+           state.cart.push(action.payload?.data) 
+           //state["totalItems"] += state.cart.length 
            state["success"] = true
            state["isRemoved"] = true
            return state;
        } 
-       case "SHOW_CART_DETAILS":{
-           state = {...state}
-           state['cartData'] = state.payload?.data
-           state['totalItems'] = state.payload?.data.length
-           state["success"] = false
-           state["isRemoved"] = false
-       }
-       case "REMOVE_ITEM_FROM_CART":{
+       case "SHOW_CART_DETAILS" : {
+            state = {...state}
+            state["cart"] = action.payload?.data
+            state["totalItems"] = action.payload?.data.length
+            state["success"] = false
+            state["removed"] = false
+            return state
+        }
+       case "REMOVE_ITEM_FROM_CART" : {
            state = {...state}
            state["isRemoved"] = true
            return state
        }
-       case "EMPTY_CART":{
-            state = {...state} //copy all previous state in state 
-            state.cart = [] //emptying the cart
-            return state
-       } 
+    //    case "EMPTY_CART":{
+    //         state = {...state} //copy all previous state in state 
+    //         state.cart = [] //emptying the cart
+    //         return state
+    //    } 
        
        default: return state
    }

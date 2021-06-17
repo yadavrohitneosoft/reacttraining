@@ -2,16 +2,16 @@ import {Link, withRouter} from 'react-router-dom';
 import querystring from 'query-string';
 import { useEffect, useState } from 'react';
 import axios from 'axios'; 
-import { css } from "@emotion/react";
-import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/react"; 
+import Loader from '../../includes/Loader'
 
 function Search(props){
     //let token = localStorage.getItem('token')
     const searchString = querystring.parse(props.location.search);
-    var apiurl = process.env.REACT_APP_BASE_URL+'/searchcakes?q='+searchString.q;
+    var apiurl = process.env.REACT_APP_API_BASE_URL+'/searchcakes?q='+searchString.q;
     var [items,getItems] = useState([]); //initialising items with an empty array
     var [length, getLength] = useState(0)
-    var [isLoading,setLoading] = useState(true);
+    var [loading,setLoading] = useState(true);
     useEffect(()=>{ 
         axios({
             method:"get",
@@ -30,11 +30,11 @@ function Search(props){
     //console.log(searchString);
     //=> {foo: 'bar'}
         return (
+            <>
+            {loading ? <Loader></Loader> :
             <div className="container">
                 <p className="pp">({length}) results found for: {searchString.q}</p>
                 <div className="row cakelist">
-                    {/* show loading till the time data loads */}
-                    <HashLoader loading={isLoading} color="#FEBD69" css={css`display: block;margin: 0 auto;`} size={40} /> 
                     {  
                         items.length > 0 && //if length greather than 0 then map will execute
                         //before we were getting values from data component now we are getting from an API Url
@@ -52,7 +52,9 @@ function Search(props){
                     { items.length <= 0 && <div className="col12"> No data found!</div> }
                 </div>   
             </div>
-        ) 
+            }
+        </>
+    ) 
 }
 
 export default Search;

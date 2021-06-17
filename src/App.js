@@ -15,6 +15,7 @@ import Checkout from './components/Checkout/Checkout';
 import Search from './components/Search/Search';
 import axios from 'axios';
 import Dashboard from './components/Admin/Dashboard'
+import Orders from './components/My-Orders/Orders'
 
 //--------------LAZY LOADING CONCEPT-------------------------------
 //here we are lazy loading the cart component 
@@ -75,6 +76,7 @@ function App() {
           {/* path="/*" will come after all route cz it has a global search, 
               if we put first then other routes will not get search */}
           <Route exact path="/dashboard" ><Dashboard/></Route>
+          <Route exact path="/my-orders" component={Orders} />
           <Route exact path="/*" component={PageNotFound}></Route> {/* here PageNotFound component passed as a props  */}
         </Switch>
         <Footer />

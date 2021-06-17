@@ -1,4 +1,3 @@
-import { getAllByPlaceholderText } from "@testing-library/dom";
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { connect } from "react-redux";
@@ -41,23 +40,24 @@ let Header = (props)=> { //props are readonly- we can't modify  them
         props.history.push('/');
     }
     //only to get cart details everywhere
+    
     useEffect(() => {
         if (localStorage.getItem('token')) {
             axios({
                 url: process.env.REACT_APP_API_BASE_URL + '/cakecart',
                 method: 'post'
             }).then(res => {
-                const cartData = res.data.data
+                const cartDataList = res.data.data
                 props.dispatch({
                     type: "SHOW_CART_DETAILS",
                     payload: {
-                        data: cartData
+                        data: cartDataList
                     }
                 })
             }, err => {
             })
         }
-    }, []) 
+    }, [])
  
 
     return (
@@ -87,7 +87,7 @@ let Header = (props)=> { //props are readonly- we can't modify  them
                 <div className="ml10">
                     <ul className="navbar-nav mx-auto">
                         {props.isLoggedIn && <li><Link to="/cart" id="cart" style={{marginRight: '10px'}}><i className="fa fa-shopping-cart"></i>
-                        {/* <span className="crt">{props.totalItems}</span> */}
+                        <span className="crt">{props.totalItems}</span>
                         </Link></li> }
                         <li className="nav-item log"> 
                         {!props.isLoggedIn && <span className="valign">Hello, Guest!</span>}
@@ -95,6 +95,9 @@ let Header = (props)=> { //props are readonly- we can't modify  them
                         </li>
                         <li className="nav-item log ">
                         {!props.isLoggedIn && <Link to="/login"><button className="btn fs12 btn-primary my-2 my-sm-0 lgbtn lh17">Login</button></Link>  }
+                        {props.isLoggedIn && 
+                            <Link to="/my-orders"><button className="btn fs12 btn-success searchbtn my-2 my-sm-0 lh17">My Orders</button></Link>
+                        }
                         {props.isLoggedIn && <button className="btn fs12 btn-danger my-2 my-sm-0 lh17" onClick={logout} >Logout</button> }
                         </li>
                     </ul>
